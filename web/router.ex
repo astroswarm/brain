@@ -16,6 +16,7 @@ defmodule SwarmBrain.Router do
   scope "/", SwarmBrain do
     pipe_through :browser # Use the default browser stack
 
+    get "/status", StatusController, :index
     get "/", PageController, :index
   end
 
