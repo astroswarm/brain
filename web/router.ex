@@ -21,7 +21,9 @@ defmodule SwarmBrain.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", SwarmBrain do
-  #   pipe_through :api
-  # end
+  scope "/api", SwarmBrain do
+    pipe_through :api
+
+    post "/execute_command", ShellCommandController, :create
+  end
 end
