@@ -12,6 +12,8 @@ ADD ./ /app
 
 ENV PORT 8080
 ENV MIX_ENV prod
+ENV SECRET_KEY_BASE=eventuallythisshouldbeasecret
+
 RUN mix do deps.get, compile, phoenix.digest
 
 EXPOSE 8080
