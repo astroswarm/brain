@@ -2,6 +2,9 @@ FROM elixir:1.4-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get -y update
+RUN apt-get -y install pastebinit
+
 RUN mix local.hex --force
 RUN mix local.rebar --force
 RUN mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez
