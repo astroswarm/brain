@@ -1,9 +1,6 @@
 defmodule SwarmBrain.ShellCommandControllerTest do
   use SwarmBrain.ConnCase
 
-  @valid_attrs %{command: "some content"}
-  @invalid_attrs %{}
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
