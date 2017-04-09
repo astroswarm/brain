@@ -22,7 +22,7 @@ defmodule SwarmBrain.Endpoint do
   plug Plug.RequestId
   plug Plug.Logger
 
-  plug Corsica, origins: [~r{^https?://localhost\:\d+$}], allow_headers: ["Content-Type"]
+  plug Corsica, origins: "*", allow_headers: ["Content-Type"]
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
