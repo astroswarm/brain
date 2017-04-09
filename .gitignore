@@ -1,3 +1,6 @@
+# Dockerfile is generated dynamically.
+Dockerfile
+
 # App artifacts
 /_build
 /db
