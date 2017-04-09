@@ -1,0 +1,4 @@
+#!/bin/sh
+
+uname -m | grep arm && echo "FROM resin/rpi-raspbian:jessie" > Dockerfile || echo "FROM debian:jessie" > Dockerfile
+cat Dockerfile_template >> Dockerfile
