@@ -10,6 +10,10 @@ RUN apt-key add erlang_solutions.asc
 RUN apt-get -y update
 RUN apt-get -y install erlang erlang-dev erlang-parsetools elixir pastebinit
 
+# Run NTP to avoid time conflicts that invalidate elixir's CDN certs
+RUN apt-get -y install ntp
+RUN service ntp start
+
 RUN mix local.hex --force
 RUN mix local.rebar --force
 RUN mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez
