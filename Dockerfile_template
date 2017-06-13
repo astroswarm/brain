@@ -2,32 +2,29 @@
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -y update
-RUN apt-get install -y wget
-RUN echo "deb http://packages.erlang-solutions.com/debian jessie contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
-RUN wget http://packages.erlang-solutions.com/debian/erlang_solutions.asc
-RUN apt-key add erlang_solutions.asc
+RUN apt-get -y install build-essential curl git
+RUN apt-get -y install zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev
+RUN apt-get -y install rbenv
+RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+RUN CONFIGURE_OPTS="--disable-install-doc --enable-shared" rbenv install -v 2.4.1
 
-RUN apt-get -y update
-RUN apt-get -y install erlang erlang-dev erlang-parsetools elixir pastebinit
-
-# Run NTP to avoid time conflicts that invalidate elixir's CDN certs
-RUN apt-get -y install ntp
-RUN service ntp start
-
-RUN mix local.hex --force
-RUN mix local.rebar --force
-RUN mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez
+ENV PATH $HOME/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN rbenv global 2.4.1
+RUN rbenv exec ruby -v
+RUN rbenv exec gem install --no-ri --no-rdoc bundler
 
 RUN mkdir -p /app
+ADD Gemfile* /app/
 WORKDIR /app
-ADD ./ /app
 
 ENV PORT 8080
-ENV MIX_ENV prod
-ENV SECRET_KEY_BASE=eventuallythisshouldbeasecret
+ENV RACK_ENV production
 
-RUN mix do deps.get, compile, phoenix.digest
+RUN apt-get -y install pastebinit
+RUN rbenv exec bundle install --with=$RACK_ENV
 
-EXPOSE 8080
+ADD ./ /app
 
-CMD ["mix", "phoenix.server"]
+EXPOSE $PORT
+
+CMD rbenv exec bundle exec rackup -p $PORT -E $RACK_ENV 2>&1
