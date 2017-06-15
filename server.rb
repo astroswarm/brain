@@ -2,6 +2,7 @@ require 'json'
 require 'sinatra/base'
 require 'sinatra/namespace'
 require 'logger'
+require 'httparty'
 
 class AstrolabServer < Sinatra::Base
   register Sinatra::Namespace
@@ -34,6 +35,25 @@ class AstrolabServer < Sinatra::Base
       args = payload['args'] || []
 
       execute_command(command, args).to_json
+    end
+
+    post '/heartbeat' do
+      response = HTTParty.post "http://localhost:3000/v1/astrolabs",
+        headers: {
+          "Content-Type" => "application/vnd.api+json"
+        },
+        body: {
+          "data" => {
+            "type" => "astrolabs",
+            "attributes" => {
+              "serial-number" => "SN001",
+              "last-private-ip-address" => "127.0.0.1"
+            }
+          }
+        }.to_json
+
+      status response.code
+      response.body
     end
   end
 

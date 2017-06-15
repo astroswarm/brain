@@ -1,0 +1,38 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:3000/v1/astrolabs
+    body:
+      encoding: UTF-8
+      string: '{"data":{"type":"astrolabs","attributes":{"serial-number":"SN001","last-private-ip-address":"127.0.0.1"}}}'
+    headers:
+      Content-Type:
+      - application/vnd.api+json
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/vnd.api+json
+      Location:
+      - http://localhost:3000/v1/astrolabs/11
+      Etag:
+      - W/"ef455aa0a7adbc7a033d61cbe01918cf"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1af8fb72-6788-4eee-87b9-349b0d689517
+      X-Runtime:
+      - '0.199460'
+      Vary:
+      - Origin
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"data":{"id":"11","type":"astrolabs","links":{"self":"http://localhost:3000/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"127.0.0.1","last-seen-at":"2017-06-15T02:46:17.555Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-15T02:16:00.016Z","updated-at":"2017-06-15T02:46:17.564Z"}}}'
+    http_version: 
+  recorded_at: Thu, 15 Jun 2017 02:46:17 GMT
+recorded_with: VCR 3.0.3

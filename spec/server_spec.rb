@@ -29,5 +29,14 @@ RSpec.describe AstrolabServer do
         expect(JSON.parse(last_response.body)["exit_code"]).to equal(1)
       end
     end
+    describe '/heartbeat' do
+      it 'registers the astrolab and returns the response' do
+        VCR.use_cassette('heartbeat', :allow_unused_http_interactions => false) do
+          post '/api/heartbeat'
+
+          expect(last_response.body).to eq('{"data":{"id":"11","type":"astrolabs","links":{"self":"http://localhost:3000/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"127.0.0.1","last-seen-at":"2017-06-15T02:46:17.555Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-15T02:16:00.016Z","updated-at":"2017-06-15T02:46:17.564Z"}}}')
+        end
+      end
+    end
   end
 end
