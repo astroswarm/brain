@@ -1,0 +1,23 @@
+version: '3'
+services:
+  heartbeat:
+    build:
+      context: ../heartbeat
+      dockerfile: Dockerfile.development
+    environment:
+      BRAIN_HOST: swarm_brain:9292
+    depends_on:
+      - swarm_brain
+  swarm_brain:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    environment:
+      RACK_ENV: development
+    volumes:
+      - ./:/app
+      - bundle-volume:/bundle
+    ports:
+      - "5000:9292"
+volumes:
+  bundle-volume:
