@@ -20,7 +20,6 @@ class AstrolabServer < Sinatra::Base
 
   namespace '/api' do
     before do
-      content_type 'application/vnd.api+json'
       headers['Access-Control-Allow-Origin'] = "*"
     end
 
