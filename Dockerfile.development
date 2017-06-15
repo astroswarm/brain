@@ -25,4 +25,4 @@ RUN rbenv exec bundle install
 
 EXPOSE 9292
 
-CMD rbenv exec bundle exec rackup -p 9292 -o 0.0.0.0 -E $RACK_ENV
+CMD rbenv exec bundle exec rackup -s puma -p 9292 -o http://0.0.0.0 -E $RACK_ENV

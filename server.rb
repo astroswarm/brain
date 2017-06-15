@@ -37,7 +37,7 @@ class AstrolabServer < Sinatra::Base
     end
 
     post '/heartbeat' do
-      response = HTTParty.post "http://localhost:3000/v1/astrolabs",
+      response = HTTParty.post "http://#{ENV['ASTROSWARM_API_HOST']}/v1/astrolabs",
         headers: {
           "Content-Type" => "application/vnd.api+json"
         },
