@@ -1,5 +1,0 @@
-#!/bin/sh
-
-./clean
-./configure
-docker build ./
