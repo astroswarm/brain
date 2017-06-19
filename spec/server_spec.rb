@@ -33,7 +33,7 @@ RSpec.describe AstrolabServer do
       it 'registers the astrolab and returns the response' do
         VCR.use_cassette('heartbeat', :allow_unused_http_interactions => false) do
           post '/api/heartbeat'
-          expect(last_response.body).to eq('{"data":{"id":"11","type":"astrolabs","links":{"self":"http://172.19.0.1:3001/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"127.0.0.1","last-seen-at":"2017-06-19T00:33:53.529Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-18T03:21:39.940Z","updated-at":"2017-06-19T00:33:53.533Z"}}}')
+          expect(last_response.body).to eq('{"data":{"id":"11","type":"astrolabs","links":{"self":"http://172.19.0.1:3001/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"10.1.1.25","last-seen-at":"2017-06-19T03:10:37.289Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-18T03:21:39.940Z","updated-at":"2017-06-19T03:10:37.298Z"}}}')
         end
       end
     end

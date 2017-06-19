@@ -5,7 +5,7 @@ http_interactions:
     uri: http://172.19.0.1:3001/v1/astrolabs
     body:
       encoding: UTF-8
-      string: '{"data":{"type":"astrolabs","attributes":{"serial-number":"SN001","last-private-ip-address":"127.0.0.1"}}}'
+      string: '{"data":{"type":"astrolabs","attributes":{"serial-number":"SN001","last-private-ip-address":"10.1.1.25"}}}'
     headers:
       Content-Type:
       - application/vnd.api+json
@@ -19,20 +19,20 @@ http_interactions:
       Location:
       - http://172.19.0.1:3001/v1/astrolabs/11
       Etag:
-      - W/"d619d729085f687daa4cd08efee7e1d3"
+      - W/"ffa1c141999b05ed126ffe488b8b5a8f"
       Cache-Control:
       - max-age=0, private, must-revalidate
       X-Request-Id:
-      - b8cac1b8-b6a6-4f29-b1b9-cabc4d8b13da
+      - 214fbd22-4955-4c50-8fc3-fe2387675103
       X-Runtime:
-      - '0.046355'
+      - '0.066894'
       Vary:
       - Origin
       Transfer-Encoding:
       - chunked
     body:
       encoding: UTF-8
-      string: '{"data":{"id":"11","type":"astrolabs","links":{"self":"http://172.19.0.1:3001/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"127.0.0.1","last-seen-at":"2017-06-19T00:33:53.529Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-18T03:21:39.940Z","updated-at":"2017-06-19T00:33:53.533Z"}}}'
+      string: '{"data":{"id":"11","type":"astrolabs","links":{"self":"http://172.19.0.1:3001/v1/astrolabs/11"},"attributes":{"last-public-ip-address":"172.18.0.1","last-private-ip-address":"10.1.1.25","last-seen-at":"2017-06-19T03:10:37.289Z","last-country-name":"","last-region-name":"","last-city":"","last-zip-code":"","last-time-zone":"","last-latitude":0.0,"last-longitude":0.0,"created-at":"2017-06-18T03:21:39.940Z","updated-at":"2017-06-19T03:10:37.298Z"}}}'
     http_version: 
-  recorded_at: Mon, 19 Jun 2017 00:33:53 GMT
+  recorded_at: Mon, 19 Jun 2017 03:10:37 GMT
 recorded_with: VCR 3.0.3
