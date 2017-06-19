@@ -4,6 +4,8 @@ require 'sinatra/namespace'
 require 'logger'
 require 'httparty'
 
+require_relative 'util'
+
 class AstrolabServer < Sinatra::Base
   register Sinatra::Namespace
 
@@ -33,7 +35,7 @@ class AstrolabServer < Sinatra::Base
       command = payload['command']
       args = payload['args'] || []
 
-      execute_command(command, args).to_json
+      Util.execute_command(command, args).to_json
     end
 
     post '/heartbeat' do
@@ -58,18 +60,5 @@ class AstrolabServer < Sinatra::Base
 
   get '/status' do
     'OK'
-  end
-
-  private
-  def execute_command(command, args)
-    output = `#{command} #{args.map{|a| "\"#{a}\""}.join(' ')}`
-    exit_code = $?.exitstatus
-    
-    {
-      command: command,
-      args: args,
-      output: output,
-      exit_code: exit_code
-    }
   end
 end
