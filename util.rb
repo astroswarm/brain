@@ -16,4 +16,9 @@ module Util
     File.open("#{ENV['HOST_DATA_DIR']}/#{filename}", "rb").read
   end
   module_function :load_host_data_file
+
+  def get_serial_number
+    execute_command('cat /sys/class/net/eth0/address | sed s/\://g')[:output].strip
+  end
+  module_function :get_serial_number
 end

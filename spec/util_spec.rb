@@ -18,6 +18,12 @@ RSpec.describe Util do
     end
   end
 
+  describe '#get_serial_number' do
+    it 'returns a 12-digit serial number' do
+      expect(Util.get_serial_number.length).to equal(12)
+    end
+  end
+
   describe '#load_host_data_file' do
     it "returns contents of specified file" do
       expect(Util.load_host_data_file 'lan_ip_address').to eql(`cat /host-data/lan_ip_address`)
