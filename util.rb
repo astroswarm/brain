@@ -13,7 +13,7 @@ module Util
   module_function :execute_command
   
   def load_host_data_file(filename)
-    File.open("/host-data/#{filename}", "rb").read
+    File.open("#{ENV['HOST_DATA_DIR']}/#{filename}", "rb").read
   end
   module_function :load_host_data_file
 end
