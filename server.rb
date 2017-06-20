@@ -48,7 +48,7 @@ class AstrolabServer < Sinatra::Base
             "type" => "astrolabs",
             "attributes" => {
               "serial-number" => Util.get_serial_number,
-              "last-private-ip-address" => Util.load_host_data_file('lan_ip_address')
+              "last-private-ip-address" => Util.load_host_data_file('lan_ip_address').strip
             }
           }
         }.to_json
