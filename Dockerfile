@@ -1,4 +1,6 @@
-FROM base:latest
+ARG ARCH
+
+FROM astroswarm/base-$ARCH:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
