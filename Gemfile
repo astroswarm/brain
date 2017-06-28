@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'docker-api'
 gem 'httparty'
 gem 'sinatra'
 gem 'sinatra-contrib'
