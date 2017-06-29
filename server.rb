@@ -56,6 +56,14 @@ class AstrolabServer < Sinatra::Base
       status response.code
       response.body
     end
+
+    post '/launch_xapplication' do
+      payload = JSON.parse(request.body.read)
+      Util.launch_xapplication(payload['image'])
+      
+      status 200
+      {"status" => "OK"}.to_json
+    end
   end
 
   get '/status' do
