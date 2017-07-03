@@ -24,9 +24,11 @@ RSpec.describe Util do
     end
   end
 
-  describe '#load_host_data_file' do
-    it "returns contents of specified file" do
-      expect(Util.load_host_data_file 'lan_ip_address').to eql(`cat /host-data/lan_ip_address`)
+  describe 'private methods' do
+    describe '#load_host_data_file' do
+      it "returns contents of specified file" do
+        expect(Util.send :load_host_data_file, 'lan_ip_address').to eql(`cat /host-data/lan_ip_address`)
+      end
     end
   end
 

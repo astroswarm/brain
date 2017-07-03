@@ -20,10 +20,6 @@ class Util
       }
     end
 
-    def load_host_data_file(filename)
-      File.open("#{ENV['HOST_DATA_DIR']}/#{filename}", "rb").read
-    end
-
     def post_heartbeat
       HTTParty.post("http://#{ENV['ASTROSWARM_API_HOST']}/v1/astrolabs",
         headers: {
@@ -173,6 +169,10 @@ class Util
 
       # Remove ARCH qualifier when it's amended to the end of the name
       name.chomp("-#{ARCH}")
+    end
+
+    def load_host_data_file(filename)
+      File.open("#{ENV['HOST_DATA_DIR']}/#{filename}", "rb").read
     end
   end
 end
