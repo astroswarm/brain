@@ -48,7 +48,7 @@ class AstrolabServer < Sinatra::Base
             "type" => "astrolabs",
             "attributes" => {
               "serial-number" => Util.get_serial_number,
-              "last-private-ip-address" => Util.load_host_data_file('lan_ip_address').strip
+              "last-private-ip-address" => Util.get_lan_ip_address
             }
           }
         }.to_json
@@ -57,12 +57,35 @@ class AstrolabServer < Sinatra::Base
       response.body
     end
 
-    post '/launch_xapplication' do
+    post '/clean_xapplication' do
       payload = JSON.parse(request.body.read)
-      Util.launch_xapplication(payload['image'])
+      Util.clean_xapplication(payload['image'])
+
+      status 200
+      {"status" => "OK"}.to_json
+    end
+
+    post '/start_xapplication' do
+      payload = JSON.parse(request.body.read)
+      Util.start_xapplication(payload['image'])
       
       status 200
       {"status" => "OK"}.to_json
+    end
+
+    post '/stop_xapplication' do
+      payload = JSON.parse(request.body.read)
+      Util.stop_xapplication(payload['image'])
+
+      status 200
+      {"status" => "OK"}.to_json
+    end
+
+    get '/running_xapplications' do
+      response = Util.running_xapplications.to_json
+
+      status 200
+      response
     end
   end
 

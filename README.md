@@ -7,3 +7,8 @@ This service coordinates everything the Astrolab does. It provides API endpoints
 * `ASTROSWARM_API_HOST` is the hostname and port of the AstroSwarm API.
 * `HOST_DATA_DIR` is a directory containing files about the host, which should be mounted by the host upon container creation.
 * `RACK_ENV` is the environment in which this service runs ("development" or "production").
+
+## Useful curl commands:
+
+* Download and run PHD2 with: `curl -X POST -d '{"image": "astroswarm/phd2-x86_64:latest"}' http://localhost:5000/api/start_xapplication`
+* Stop PHD2 with `curl -X POST -d '{"image": "astroswarm/phd2-x86_64:latest"}' http://localhost:5000/api/stop_xapplication`
