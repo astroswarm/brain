@@ -2,7 +2,6 @@ require 'json'
 require 'sinatra/base'
 require 'sinatra/namespace'
 require 'logger'
-require 'httparty'
 
 require_relative 'util'
 
