@@ -24,6 +24,22 @@ class Util
       File.open("#{ENV['HOST_DATA_DIR']}/#{filename}", "rb").read
     end
 
+    def post_heartbeat
+      HTTParty.post("http://#{ENV['ASTROSWARM_API_HOST']}/v1/astrolabs",
+        headers: {
+          "Content-Type" => "application/vnd.api+json"
+        },
+        body: {
+          "data" => {
+            "type" => "astrolabs",
+            "attributes" => {
+              "serial-number" => Util.get_serial_number,
+              "last-private-ip-address" => Util.get_lan_ip_address
+            }
+          }
+        }.to_json)
+    end
+
     def get_serial_number
       execute_command('cat /sys/class/net/eth0/address | sed s/\://g')[:output].strip
     end
