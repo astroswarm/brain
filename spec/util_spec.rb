@@ -30,7 +30,7 @@ RSpec.describe Util do
     end
   end
 
-  describe 'xapplication i/o' do
+  xdescribe 'xapplication i/o' do
     before do
       @phd2_image = "astroswarm/phd2-x86_64:latest"
       VCR.turn_off!
