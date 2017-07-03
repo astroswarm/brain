@@ -48,10 +48,11 @@ RSpec.describe Util do
     end
 
     def wait_until(&block)
+      max_time = 60
       started_at = Time.now
       until !!block.call
-        if Time.now > started_at + 30
-          raise "Condition was not reached in under 30 seconds"
+        if Time.now > started_at + max_time
+          raise "Condition was not reached in under #{max_time} seconds"
         else
           sleep 0.1
         end
@@ -82,6 +83,41 @@ RSpec.describe Util do
 
       Util.clean_xapplication @phd2_image
 
+      containers.each do |c|
+        wait_until do
+          Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"]}.to_json).count == 0
+        end
+      end
+    end
+
+    it '#running_xapplications returns hash with endpoints' do
+      containers = %w(localtunnel websockify xapplication)
+      containers.each do |c|
+        expect(Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"]}.to_json).count).to eql(0)
+      end
+
+      Util.start_xapplication @phd2_image
+
+      containers.each do |c|
+        wait_until do
+          Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"], status: ['running']}.to_json).count == 1
+        end
+      end
+
+      # Wait until the tunnel is up to proceed
+      wait_until {HTTParty.get("http://phd2_localtunnel_1:8080").body != ""}
+
+      response = Util.running_xapplications
+      expect(response.count).to eql(1)
+      
+      app = response.first
+      expect(app[:name]).to eql('phd2')
+      expect(app[:local_vnc_endpoint]).to match(/^vnc\:\/\/\d+\.\d+\.\d+\.\d+\:\d+$/)
+      expect(app[:local_websockify_endpoint]).to match(/^http\:\/\/\d+\.\d+\.\d+\.\d+\:\d+$/)
+      expect(app[:remote_websockify_endpoint]).to match(/^https\:\/\/[a-z]+\.localtunnel.me$/)
+
+
+      Util.clean_xapplication @phd2_image
       containers.each do |c|
         wait_until do
           Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"]}.to_json).count == 0

@@ -82,7 +82,7 @@ class Util
 
         localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=localtunnel"] }.to_json).first
         localtunnel_name = localtunnel_container.info["Names"].first.split('/')[1]
-        remote_websockify_endpoint = HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").strip
+        remote_websockify_endpoint = HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").body.strip
 
         websockify_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=websockify"] }.to_json).first
         websockify_public_port = websockify_container.info["Ports"].keep_if{
