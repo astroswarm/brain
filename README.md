@@ -12,3 +12,4 @@ This service coordinates everything the Astrolab does. It provides API endpoints
 
 * Download and run PHD2 with: `curl -X POST -d '{"image": "astroswarm/phd2-x86_64:latest"}' http://localhost:5000/api/start_xapplication`
 * Stop PHD2 with `curl -X POST -d '{"image": "astroswarm/phd2-x86_64:latest"}' http://localhost:5000/api/stop_xapplication`
+* Clean PHD2 and remove all stored user data: `curl -X POST -d '{"image": "astroswarm/phd2-x86_64:latest"}' http://localhost:5000/api/clean_xapplication` 
