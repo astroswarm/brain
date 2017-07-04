@@ -92,10 +92,6 @@ class Util
       Docker::Container.all(all: true, filters: { name: ["xapplication"] }.to_json).each do |xapplication_container|
         application_name = xapplication_container.info["Names"].first.split('/')[1].split('_')[0]
 
-        localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=localtunnel"] }.to_json).first
-        localtunnel_name = localtunnel_container.info["Names"].first.split('/')[1]
-        remote_websockify_endpoint = HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").body.strip
-
         websockify_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=websockify"] }.to_json).first
         websockify_public_port = websockify_container.info["Ports"].keep_if{
           |hash| hash["PrivatePort"] == EXPECTED_WEBSOCKIFY_PORT
@@ -112,7 +108,7 @@ class Util
           name: application_name,
           local_vnc_endpoint: vnc_endpoint,
           local_websockify_endpoint: local_websockify_endpoint,
-          remote_websockify_endpoint: remote_websockify_endpoint
+          remote_websockify_endpoint: get_localtunnel_endpoint(application_name)
         }
       end
 
@@ -120,6 +116,12 @@ class Util
     end
 
     private
+
+    def get_localtunnel_endpoint(compose_project)
+      localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{compose_project}", "com.docker.compose.service=localtunnel"] }.to_json).first
+      localtunnel_name = localtunnel_container.info["Names"].first.split('/')[1]
+      HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").body.strip
+    end
 
     def generate_compose_content_for_xapplication(docker_image)
       <<~EOS
