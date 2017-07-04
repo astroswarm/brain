@@ -137,6 +137,8 @@ class Util
           ports:
             - "#{EXPECTED_VNC_PORT}/tcp"
           restart: unless-stopped
+          volumes:
+            - "/dev/bus/usb:/dev/bus/usb"
         websockify:
           depends_on:
             - xapplication
