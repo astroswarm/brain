@@ -31,6 +31,7 @@ class Util
             "attributes" => {
               "serial-number" => get_serial_number,
               "private-ip-address" => get_lan_ip_address,
+              "tunnel-endpoint" => get_localtunnel_endpoint('astrolab')
             }
           }
         }.to_json)
