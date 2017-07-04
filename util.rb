@@ -30,7 +30,7 @@ class Util
             "type" => "astrolabs",
             "attributes" => {
               "serial-number" => get_serial_number,
-              "last-private-ip-address" => get_lan_ip_address
+              "private-ip-address" => get_lan_ip_address,
             }
           }
         }.to_json)
