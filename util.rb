@@ -94,10 +94,15 @@ class Util
         application_name = xapplication_container.info["Names"].first.split('/')[1].split('_')[0]
 
         websockify_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=websockify"] }.to_json).first
-        websockify_public_port = websockify_container.info["Ports"].keep_if{
-          |hash| hash["PrivatePort"] == EXPECTED_WEBSOCKIFY_PORT
-        }.first["PublicPort"]
-        local_websockify_endpoint = "http://#{get_lan_ip_address}:#{websockify_public_port}"
+        local_websockify_endpoint =
+          if websockify_container.nil?
+            nil
+          else
+            websockify_public_port = websockify_container.info["Ports"].keep_if{
+              |hash| hash["PrivatePort"] == EXPECTED_WEBSOCKIFY_PORT
+            }.first["PublicPort"]
+            "http://#{get_lan_ip_address}:#{websockify_public_port}"
+          end
 
         xapplication_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=xapplication"] }.to_json).first
         vnc_public_port = xapplication_container.info["Ports"].keep_if{
@@ -120,8 +125,12 @@ class Util
 
     def get_localtunnel_endpoint(compose_project)
       localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{compose_project}", "com.docker.compose.service=localtunnel"] }.to_json).first
-      localtunnel_name = localtunnel_container.info["Names"].first.split('/')[1]
-      HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").body.strip
+      if localtunnel_container
+        localtunnel_name = localtunnel_container.info["Names"].first.split('/')[1]
+        HTTParty.get("http://#{localtunnel_name}:#{LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT}").body.strip
+      else
+        nil
+      end
     end
 
     def generate_compose_content_for_xapplication(docker_image)

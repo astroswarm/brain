@@ -111,12 +111,44 @@ RSpec.describe Util do
 
       response = Util.running_xapplications
       expect(response.count).to eql(1)
-      
+
       app = response.first
       expect(app[:name]).to eql('phd2')
       expect(app[:local_vnc_endpoint]).to match(/^vnc\:\/\/\d+\.\d+\.\d+\.\d+\:\d+$/)
       expect(app[:local_websockify_endpoint]).to match(/^http\:\/\/\d+\.\d+\.\d+\.\d+\:\d+$/)
       expect(app[:remote_websockify_endpoint]).to match(/^https\:\/\/[a-z]+\.localtunnel.me$/)
+
+
+      Util.clean_xapplication @phd2_image
+      containers.each do |c|
+        wait_until do
+          Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"]}.to_json).count == 0
+        end
+      end
+    end
+
+    it '#running_xapplications returns only endpoints that are available' do
+      containers = %w(localtunnel websockify xapplication)
+      containers.each do |c|
+        expect(Docker::Container.all(all: true, filters: {name: ["phd2_#{c}_1"]}.to_json).count).to eql(0)
+      end
+
+      Util.start_xapplication @phd2_image
+
+      wait_until do
+        Docker::Container.all(all: true, filters: {name: ["phd2_xapplication_1"], status: ['running']}.to_json).count == 1
+      end
+
+      # Rely on websockify endpoints not being ready yet
+
+      response = Util.running_xapplications
+      expect(response.count).to eql(1)
+
+      app = response.first
+      expect(app[:name]).to eql('phd2')
+      expect(app[:local_vnc_endpoint]).to match(/^vnc\:\/\/\d+\.\d+\.\d+\.\d+\:\d+$/)
+      expect(app[:local_websockify_endpoint]).to be_nil
+      expect(app[:remote_websockify_endpoint]).to be_nil
 
 
       Util.clean_xapplication @phd2_image
