@@ -9,6 +9,17 @@ end
 VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
   config.hook_into :webmock
+  config.ignore_request do |request|
+    ignore = false
+    host = URI(request.uri).host
+
+    # Assume domain-less hosts are docker containers
+    ignore = true if !host.include? ('.')
+    # Assume hard-coded IP addresses are local docker containers
+    ignore = true if host =~ /^\d+\.\d+\.\d+\.\d+$/
+
+    ignore
+  end
 end
 
 RSpec.configure do |config|

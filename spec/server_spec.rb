@@ -31,11 +31,9 @@ RSpec.describe AstrolabServer do
     end
     describe '/heartbeat' do
       it 'successfully registers the astrolab and returns the response' do
-        VCR.use_cassette('heartbeat', allow_unused_http_interactions: false) do
-          post '/api/heartbeat'
-          expect(last_response.status).to equal(201)
-          expect(JSON.parse(last_response.body)).to have_key('data')
-        end
+        post '/api/heartbeat'
+        expect(last_response.status).to equal(201)
+        expect(JSON.parse(last_response.body)).to have_key('data')
       end
     end
   end
