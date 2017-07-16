@@ -49,12 +49,8 @@ class Util
       name = get_name_of_docker_image(image)
 
       filepath = "#{ENV['HOME']}/#{name}.yml"
-      pid = Process.fork
-      if pid.nil?
-        exec "docker-compose -f #{filepath} -p #{name} down"
-      else
-        Process.detach(pid)
-      end
+
+      fork_and_run_detached "docker-compose -f #{filepath} -p #{name} down"
     end
 
     def start_xapplication(image)
@@ -67,24 +63,15 @@ class Util
         file.write compose_content
       end
 
-      pid = Process.fork
-      if pid.nil?
-        exec "docker-compose -f #{filepath} -p #{name} up"
-      else
-        Process.detach(pid)
-      end
+      fork_and_run_detached "docker-compose -f #{filepath} -p #{name} up"
     end
 
     def stop_xapplication(image)
       name = get_name_of_docker_image(image)
 
       filepath = "#{ENV['HOME']}/#{name}.yml"
-      pid = Process.fork
-      if pid.nil?
-        exec "docker-compose -f #{filepath} -p #{name} stop"
-      else
-        Process.detach(pid)
-      end
+
+      fork_and_run_detached "docker-compose -f #{filepath} -p #{name} stop"
     end
 
     def running_xapplications
@@ -122,6 +109,15 @@ class Util
     end
 
     private
+
+    def fork_and_run_detached(command)
+      pid = Process.fork
+      if pid.nil?
+        exec command
+      else
+        Process.detach(pid)
+      end
+    end
 
     def get_localtunnel_endpoint(compose_project)
       localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{compose_project}", "com.docker.compose.service=localtunnel"] }.to_json).first
