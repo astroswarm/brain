@@ -145,6 +145,7 @@ class Util
           image: #{docker_image}
           ports:
             - "#{EXPECTED_VNC_PORT}/tcp"
+          privileged: true
           restart: unless-stopped
           volumes:
             - "/dev/bus/usb:/dev/bus/usb"
