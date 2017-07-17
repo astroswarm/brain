@@ -6,6 +6,7 @@ class Util
   EXPECTED_VNC_PORT = 5900
   EXPECTED_WEBSOCKIFY_PORT = 6900
   LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT = 8080
+  SHARED_ROOT = '/mnt/shared'
 
   class << self
     def execute_command(command, args = [])
@@ -63,6 +64,7 @@ class Util
         file.write compose_content
       end
 
+      fork_and_run_detached "mkdir -p #{get_shared_path_for_xapplication(name)}"
       fork_and_run_detached "docker-compose -f #{filepath} -p #{name} up"
     end
 
@@ -119,6 +121,10 @@ class Util
       end
     end
 
+    def get_shared_path_for_xapplication(application_name)
+      "#{SHARED_ROOT}/#{application_name}/shared"
+    end
+
     def get_localtunnel_endpoint(compose_project)
       localtunnel_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{compose_project}", "com.docker.compose.service=localtunnel"] }.to_json).first
       if localtunnel_container
@@ -145,6 +151,7 @@ class Util
           restart: unless-stopped
           volumes:
             - "/dev/bus/usb:/dev/bus/usb"
+            - "#{get_shared_path_for_xapplication(get_name_of_docker_image(docker_image))}:/shared"
         websockify:
           depends_on:
             - xapplication
