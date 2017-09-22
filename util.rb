@@ -83,14 +83,13 @@ class Util
         application_name = xapplication_container.info["Names"].first.split('/')[1].split('_')[0]
 
         websockify_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=websockify"] }.to_json).first
-        local_websockify_endpoint =
+        websockify_public_port =
           if websockify_container.nil?
             nil
           else
-            websockify_public_port = websockify_container.info["Ports"].keep_if{
+            websockify_container.info["Ports"].keep_if{
               |hash| hash["PrivatePort"] == EXPECTED_WEBSOCKIFY_PORT
             }.first["PublicPort"]
-            "http://#{get_lan_ip_address}:#{websockify_public_port}"
           end
 
         xapplication_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=xapplication"] }.to_json).first
@@ -102,7 +101,8 @@ class Util
         applications << {
           name: application_name,
           local_vnc_endpoint: vnc_endpoint,
-          local_websockify_endpoint: local_websockify_endpoint,
+          local_websockify_hostname: get_lan_ip_address,
+          local_websockify_port: websockify_public_port,
           remote_websockify_endpoint: get_localtunnel_endpoint(application_name)
         }
       end
