@@ -24,8 +24,6 @@ ENV INSTALL_PATH /app
 RUN mkdir -p $INSTALL_PATH
 WORKDIR $INSTALL_PATH
 
-ENV BUNDLE_PATH /bundle
-
 COPY Gemfile $INSTALL_PATH
 COPY Gemfile.lock $INSTALL_PATH
 RUN rbenv exec bundle install
