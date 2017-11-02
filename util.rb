@@ -2,7 +2,6 @@ require 'docker'
 require 'httparty'
 
 class Util
-  ARCH = `uname -m`.strip
   EXPECTED_VNC_PORT = 5900
   EXPECTED_WEBSOCKIFY_PORT = 6900
   LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT = 8080
@@ -158,7 +157,7 @@ class Util
           environment:
             VNC_HOST: xapplication
             VNC_PORT: #{EXPECTED_VNC_PORT}
-          image: astroswarm/websockify-#{ARCH}:latest
+          image: astroswarm/websockify:latest
           ports:
             - "#{EXPECTED_WEBSOCKIFY_PORT}/tcp"
           restart: unless-stopped
@@ -168,14 +167,14 @@ class Util
           environment:
             HTTP_HOST: websockify
             HTTP_PORT: #{EXPECTED_WEBSOCKIFY_PORT}
-          image: astroswarm/localtunnel_client-#{ARCH}:latest
+          image: astroswarm/localtunnel_client:latest
           restart: unless-stopped
       EOS
     end
 
     def get_name_of_docker_image(image)
       # Handle all the different ways "myprogram" could be specified as a valid docker image:
-      name = if image.include?('/') && image.include?(':')
+      if image.include?('/') && image.include?(':')
         image.split('/')[1].split(':')[0] # repository/myprogram:latest
       elsif image.include?('/')
         image.split('/')[1] # repository/myprogram
@@ -184,9 +183,6 @@ class Util
       else
         image # myprogram
       end
-
-      # Remove ARCH qualifier when it's amended to the end of the name
-      name.chomp("-#{ARCH}")
     end
 
     def load_host_data_file(filename)

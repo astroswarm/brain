@@ -34,7 +34,7 @@ RSpec.describe Util do
 
   xdescribe 'xapplication i/o' do
     before do
-      @phd2_image = "astroswarm/phd2-x86_64:latest"
+      @phd2_image = "astroswarm/phd2:latest"
       VCR.turn_off!
       WebMock.allow_net_connect!
 
