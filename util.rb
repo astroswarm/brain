@@ -79,7 +79,7 @@ class Util
     def running_xapplications
       applications = []
 
-      Docker::Container.all(all: true, filters: { name: ["xapplication"] }.to_json).each do |xapplication_container|
+      Docker::Container.all(all: true, filters: { name: ["xapplication"], status: ["running"] }.to_json).each do |xapplication_container|
         application_name = xapplication_container.info["Names"].first.split('/')[1].split('_')[0]
 
         websockify_container = Docker::Container.all(all: true, filters: { label: ["com.docker.compose.project=#{application_name}", "com.docker.compose.service=websockify"] }.to_json).first
