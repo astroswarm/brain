@@ -74,6 +74,13 @@ class AstrolabServer < Sinatra::Base
       status 200
       response
     end
+
+    get '/running_webapplications' do
+      response = Util.running_webapplications.to_json
+
+      status 200
+      response
+    end
   end
 
   get '/status' do

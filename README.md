@@ -14,7 +14,7 @@ After building astrolab locally, run:
 
 ```bash
 cd ../astrolab
-docker-compose run --rm -e RACK_ENV=test brain rbenv exec bundle exec rspec spec
+docker-compose build brain && docker-compose run --rm -e RACK_ENV=test brain rbenv exec bundle exec rspec spec
 ```
 
 To rebuild from the astrolab context, use:

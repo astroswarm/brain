@@ -5,6 +5,9 @@ class Util
   EXPECTED_VNC_PORT = 5900
   EXPECTED_WEBSOCKIFY_PORT = 6900
   LOCALTUNNEL_ENDPOINT_EXPOSURE_PORT = 8080
+
+  FILE_MANAGER_PRIVATE_PORT = 8080
+  PORTAINER_PRIVATE_PORT = 9000
   SHARED_ROOT = '/mnt/shared'
 
   class << self
@@ -75,6 +78,24 @@ class Util
       fork_and_run_detached "docker-compose -f #{filepath} -p #{name} stop"
     end
 
+    def running_webapplications
+      file_manager_port = get_public_port_for_web_container("/astrolab_file_manager_1", FILE_MANAGER_PRIVATE_PORT)
+      container_manager_port = get_public_port_for_web_container("/astrolab_portainer_1", PORTAINER_PRIVATE_PORT)
+      
+      [
+        {
+          name: "File Manager",
+          slug: "file_manager",
+          local_endpoint: "http://#{get_lan_ip_address}:#{file_manager_port}"
+        },
+        {
+          name: "Container Manager",
+          slug: "container_manager",
+          local_endpoint: "http://#{get_lan_ip_address}:#{container_manager_port}"
+        }
+      ]
+    end
+
     def running_xapplications
       applications = []
 
@@ -110,6 +131,10 @@ class Util
     end
 
     private
+
+    def get_public_port_for_web_container(container_name, private_port)
+      Docker::Container.get(container_name).info["NetworkSettings"]["Ports"]["#{private_port}/tcp"].first["HostPort"]
+    end
 
     def fork_and_run_detached(command)
       pid = Process.fork

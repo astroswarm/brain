@@ -32,6 +32,16 @@ RSpec.describe Util do
     end
   end
 
+  it '#running_webapplications returns hash with file_manager and container_manager' do
+    containers = %w(file_manager portainer)
+    containers.each do |c|
+      expect(Docker::Container.all(all: true, filters: {name: ["astrolab_#{c}_1"]}.to_json).count).to eql(1)
+    end
+
+    response = Util.running_webapplications
+    expect(response.count).to eql(2)
+  end
+
   xdescribe 'xapplication i/o' do
     before do
       @phd2_image = "astroswarm/phd2:latest"
