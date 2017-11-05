@@ -17,6 +17,9 @@ RUN apt-get -y install libpython-dev python-setuptools
 RUN easy_install pip
 RUN pip install docker-compose
 
+# Needed for uploading logs via execute_command API call.
+RUN apt-get -y install pastebinit
+
 ENV INSTALL_PATH /app
 
 RUN mkdir -p $INSTALL_PATH
