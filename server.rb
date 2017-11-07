@@ -81,6 +81,27 @@ class AstrolabServer < Sinatra::Base
       status 200
       response
     end
+
+    post '/add_wifi_network' do
+      payload = JSON.parse(request.body.read)
+      Wifi.add_network payload['ssid'], payload['key']
+
+      status 200
+      {"status" => "OK"}.to_json
+    end
+    post '/remove_wifi_network' do
+      payload = JSON.parse(request.body.read)
+      Wifi.remove_network payload['ssid']
+
+      status 200
+      {"status" => "OK"}.to_json
+    end
+    get '/wifi_networks' do
+      response = Wifi.list_networks.to_json
+
+      status 200
+      response
+    end
   end
 
   get '/status' do
