@@ -11,9 +11,19 @@ class Util
   SHARED_ROOT = '/mnt/shared'
 
   class << self
-    def execute_command(command, args = [])
+    def execute_command(command, args = [], env_vars = {})
+      # Set environment variables
+      existing_vars = {}
+      env_vars.each do |var, value|
+        existing_vars[var] = ENV[var]
+        ENV[var] = value
+      end
       output = `#{command} #{args.map{|a| "\"#{a}\""}.join(' ')}`
       exit_code = $?.exitstatus
+      # Unset environment variables
+      env_vars.each do |var, _|
+        ENV[var] = existing_vars[var]
+      end
 
       {
         command: command,

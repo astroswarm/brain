@@ -37,6 +37,17 @@ class AstrolabServer < Sinatra::Base
       Util.execute_command(command, args).to_json
     end
 
+    post '/upload_logs' do
+      response = Util.execute_command(
+        "pastebinit",
+        ["-b", ENV['PASTEBINIT_URI'], "/mnt/host/var/log/syslog"]
+      )
+
+      {
+        url: response[:output].match(/https?\:\/\/.*\/raw/)[0]
+      }.to_json
+    end
+
     post '/heartbeat' do
       response = Util.post_heartbeat
 

@@ -1,4 +1,6 @@
 FROM astroswarm/base:latest
+ARG BRAIN_GO_VERSION
+ARG BRAIN_GO_ARCH
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -18,7 +20,11 @@ RUN easy_install pip
 RUN pip install docker-compose
 
 # Needed for uploading logs via execute_command API call.
-RUN apt-get -y install pastebinit
+RUN curl -o go$BRAIN_GO_VERSION.linux-$BRAIN_GO_ARCH.tar.gz https://dl.google.com/go/go$BRAIN_GO_VERSION.linux-$BRAIN_GO_ARCH.tar.gz
+RUN tar -C /usr/local -xzf go$BRAIN_GO_VERSION.linux-$BRAIN_GO_ARCH.tar.gz
+ENV PATH $PATH:/usr/local/go/bin:/go/bin
+ENV GOPATH /go
+RUN go get github.com/astroswarm/pastebinit
 
 ENV INSTALL_PATH /app
 
