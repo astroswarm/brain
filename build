@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -e
+
+BRAIN_GO_VERSION=1.10
+if [ "$(uname -m)" == "x86_64" ] ; then
+  BRAIN_GO_ARCH=amd64
+elif [ "$(uname -m)" == "armv7l" ] ; then
+  BRAIN_GO_ARCH=armv6l
+fi
+
+ARCH=`uname -m`
+echo "Detected architecture: $ARCH."
+
+echo "Setting version."
+VERSION=`date +%Y%m%d`
+echo "Version is $VERSION."
+
+docker build \
+  --build-arg BRAIN_GO_VERSION=$BRAIN_GO_VERSION \
+  --build-arg BRAIN_GO_ARCH=$BRAIN_GO_ARCH \
+  --tag astroswarm/brain-$ARCH:$VERSION \
+  --tag astroswarm/brain-$ARCH:latest \
+ ./
+
+echo "Would you like to push this image now (y/n)?"
+read release
+if [ $release = "y" ]; then
+  echo "Pushing to AstroSwarm registry."
+  docker push astroswarm/brain-$ARCH:$VERSION
+  docker push astroswarm/brain-$ARCH:latest
+fi

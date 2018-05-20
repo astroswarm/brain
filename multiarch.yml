@@ -1,0 +1,13 @@
+---
+image: "astroswarm/brain:latest"
+manifests:
+  -
+    image: "astroswarm/brain-x86_64:latest"
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: "astroswarm/brain-armv7l:latest"
+    platform:
+      architecture: arm
+      os: linux
