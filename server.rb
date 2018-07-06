@@ -4,6 +4,7 @@ require 'sinatra/namespace'
 require 'logger'
 
 require_relative 'util'
+require_relative 'wifi'
 
 class AstrolabServer < Sinatra::Base
   register Sinatra::Namespace
