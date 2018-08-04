@@ -8,6 +8,7 @@ class Util
 
   FILE_MANAGER_PRIVATE_PORT = 8080
   PORTAINER_PRIVATE_PORT = 9000
+  SHELLINABOX_PRIVATE_PORT = 4200
   SHARED_ROOT = '/mnt/shared'
 
   class << self
@@ -102,6 +103,11 @@ class Util
           name: "Container Manager",
           slug: "container_manager",
           local_endpoint: "http://#{get_lan_ip_address}:#{container_manager_port}"
+        },
+        {
+          name: "OS Terminal",
+          slug: "os_terminal",
+          local_endpoint: "http://#{get_lan_ip_address}:#{SHELLINABOX_PRIVATE_PORT}"
         }
       ]
     end
