@@ -28,4 +28,10 @@ if [ $release = "y" ]; then
   echo "Pushing to AstroSwarm registry."
   docker push astroswarm/brain-$ARCH:$VERSION
   docker push astroswarm/brain-$ARCH:latest
+elif [ $release = "n" ]; then
+  echo "Would you like to tag this image as architecture default for development (y/n)?"
+  read tag
+  if [ $tag = "y" ]; then
+    docker tag astroswarm/brain-$ARCH:latest astroswarm/brain:latest
+  fi
 fi
