@@ -40,8 +40,10 @@ class AstrolabServer < Sinatra::Base
 
     post '/upload_logs' do
       response = Util.execute_command(
-        "pastebinit",
-        ["-b", ENV['PASTEBINIT_URI'], "/mnt/host/var/log/syslog"]
+        "cat /mnt/host/var/log/syslog /mnt/host/var/lib/docker/containers/*/*-json.log | pastebinit",
+        [
+          "-b", ENV['PASTEBINIT_URI']
+        ]
       )
 
       {
