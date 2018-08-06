@@ -26,9 +26,6 @@ ENV PATH $PATH:/usr/local/go/bin:/go/bin
 ENV GOPATH /go
 RUN go get github.com/astroswarm/pastebinit
 
-# Need docker for log uploads
-RUN curl -fsSL get.docker.com | sh
-
 ENV INSTALL_PATH /app
 
 RUN mkdir -p $INSTALL_PATH
