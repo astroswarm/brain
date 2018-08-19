@@ -53,7 +53,7 @@ class Util
     end
 
     def get_serial_number
-      execute_command('cat /sys/class/net/eth0/address | sed s/\://g')[:output].strip
+      execute_command('cat /mnt/host/sys/class/net/eth0/address | sed s/\://g')[:output].strip
     end
 
     def get_lan_ip_address
