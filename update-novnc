@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Upgrades to the latest version of NoVNC
+
+set -e
+
+mkdir -p public/vendor/noVNC
+
+git clone --depth=1 https://github.com/novnc/noVNC.git
+
+mv ./noVNC/app ./public/vendor/noVNC/
+mv ./noVNC/core ./public/vendor/noVNC/
+mv ./noVNC/vendor ./public/vendor/noVNC/
+mv ./noVNC/vnc.html ./public/vendor/noVNC/
+mv ./noVNC/vnc_lite.html ./public/vendor/noVNC/
+
+rm -rf ./noVNC
