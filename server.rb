@@ -11,6 +11,8 @@ class AstrolabServer < Sinatra::Base
 
   configure do
     enable :logging
+
+    set :protection, :except => :frame_options # We anticipate public assets being loaded from iframes
   end
 
   options "*" do
