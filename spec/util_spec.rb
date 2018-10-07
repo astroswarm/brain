@@ -39,7 +39,7 @@ RSpec.describe Util do
     end
 
     response = Util.running_webapplications
-    expect(response.count).to eql(2)
+    expect(response.count).to eql(3) # Third is os_terminal, which runs on host
   end
 
   xdescribe 'xapplication i/o' do
