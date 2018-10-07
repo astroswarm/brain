@@ -13,15 +13,16 @@ This service coordinates everything the Astrolab does. It provides API endpoints
 After building astrolab locally, run:
 
 ```bash
+./build
 cd ../astrolab
-docker-compose build brain && docker-compose run --rm -e RACK_ENV=test brain rbenv exec bundle exec rspec spec
+docker-compose run --rm -e RACK_ENV=test brain rbenv exec bundle exec rspec spec
 ```
 
-To rebuild from the astrolab context, use:
+To relaunch from the astrolab context, use:
 
 ```bash
 cd ../astrolab
-docker-compose up -d --build brain
+docker-compose up -d brain
 ```
 
 ## Useful curl commands:
