@@ -176,6 +176,11 @@ class Util
       end
     end
 
+    # We use aliases for each service because:
+    # > A network-wide alias can be shared by multiple containers, and even by
+    # > multiple services. If it is, then exactly which container the name
+    # > resolves to is not guaranteed.
+    # https://docs.docker.com/compose/compose-file/#aliases
     def generate_compose_content_for_xapplication(docker_image)
       <<~EOS
       version: '3'
@@ -186,6 +191,10 @@ class Util
       services:
         xapplication:
           image: #{docker_image}
+          networks:
+            default:
+              aliases:
+                - "#{get_name_of_docker_image(docker_image)}_xapplication"
           ports:
             - "#{EXPECTED_VNC_PORT}/tcp"
           privileged: true
@@ -197,9 +206,13 @@ class Util
           depends_on:
             - xapplication
           environment:
-            VNC_HOST: xapplication
+            VNC_HOST: "#{get_name_of_docker_image(docker_image)}_xapplication"
             VNC_PORT: #{EXPECTED_VNC_PORT}
           image: astroswarm/websockify:latest
+          networks:
+            default:
+              aliases:
+                - "#{get_name_of_docker_image(docker_image)}_websockify"
           ports:
             - "#{EXPECTED_WEBSOCKIFY_PORT}/tcp"
           restart: unless-stopped
@@ -207,9 +220,13 @@ class Util
           depends_on:
             - websockify
           environment:
-            HTTP_HOST: websockify
+            HTTP_HOST: "#{get_name_of_docker_image(docker_image)}_websockify"
             HTTP_PORT: #{EXPECTED_WEBSOCKIFY_PORT}
           image: astroswarm/localtunnel_client:latest
+          networks:
+            default:
+              aliases:
+                - "#{get_name_of_docker_image(docker_image)}_localtunnel"
           restart: unless-stopped
       EOS
     end
